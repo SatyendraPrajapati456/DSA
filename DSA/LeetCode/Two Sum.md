@@ -5,14 +5,13 @@
 **Platform:** LeetCode
 
 **Question Link:**
-https://leetcode.com/problems/two-sum/
+https://leetcode.com/problems/two-sum
 
 **Question Name:** Two Sum
 
 **Question Description:**
 
-Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-Assume that each input has exactly one solution, and you may not use the same element twice.
+Refer to LeetCode problem description.
 
 ## 2. Test Cases
 
@@ -29,9 +28,9 @@ Output:
 ```
 
 Explanation:
-nums[0] + nums[1] == 2 + 7 == 9, so [0, 1] is returned.
+nums[0] + nums[1] == 2 + 7 = 9, so indices 0 and 1 are returned.
 
-### Test Case 2: Duplicate Elements
+### Test Case 2: Duplicate Values
 
 Input:
 ```text
@@ -44,73 +43,86 @@ Output:
 ```
 
 Explanation:
-The pair consists of two duplicate numbers with distinct indices: nums[0] (3) and nums[1] (3).
+nums[0] + nums[1] == 3 + 3 = 6, returning indices 0 and 1.
 
 ### Test Case 3: Negative Numbers
 
 Input:
 ```text
-nums = [-1, -2, -3, -4, -5], target = -8
+nums = [-3, 4, 3, 90], target = 0
 ```
 
 Output:
 ```text
-[2, 4]
+[0, 2]
 ```
 
 Explanation:
-nums[2] + nums[4] == -3 + (-5) == -8, so [2, 4] is returned.
+nums[0] + nums[2] == -3 + 3 = 0, returning indices 0 and 2.
 
 ## 3. AI-Generated Approach
 
-### Approach: One-pass Hash Map
+### Approach: Brute Force (Nested Loops)
 
-Iterate through the array while maintaining a hash map that maps numbers to their indices. For each element, check whether its complement (target - num) has already been seen in the map.
+Exhaustively check every possible pair of elements in the array to find two numbers whose sum equals the given target value.
 
 **Step-by-Step Reasoning:**
-1. Initialize an empty hash map 'seen' to store value-to-index associations.
-2. Iterate over the array with index 'i' and value 'num'.
-3. Compute the complement: comp = target - num.
-4. If 'comp' is present in 'seen', return the pair of indices [seen[comp], i].
-5. Otherwise, insert 'num' into 'seen' with index 'i' and continue.
-6. Return an empty collection if no pair is found (though guaranteed by constraints to have one).
+1. Iterate through the array with an outer loop variable 'i' from index 0 up to n - 1.
+2. Iterate through the remaining elements with an inner loop variable 'j' starting from i + 1 up to n - 1 to avoid duplicate or self-pair checks.
+3. Check if nums[i] + nums[j] equals target. If a match is found, immediately return an array containing the indices [i, j].
+4. If no matching pair is found after inspecting all pairs, return default fallback indices [-1, -1].
 
 **Why It Works:**
-Because addition is commutative (a + b = target is equivalent to b = target - a), when we reach the second element of the complement pair, the first element has already been visited and stored in the hash map. Looking up the complement takes O(1) average time, reducing the brute-force O(n^2) search to O(n).
+By examining every pair of distinct indices (i, j) where i < j, the algorithm guarantees that if a valid pair exists, it will be evaluated and identified.
 
 ### Time Complexity
 
-O(n)
+O(n²)
 
 ### Space Complexity
 
-O(n)
+O(1)
 
 ## 4. Java Solution
 
 ### Required Concepts
 
-- HashMap lookup and insertion
-- Autoboxing / Unboxing
-- One-pass traversal
+- Arrays
+- Nested Loops
+- Array Indexing
 
-### AI-Generated Java Implementation
+### Original Accepted Submission
 
 ```java
-import java.util.HashMap;
-import java.util.Map;
+1class Solution {
+2    public int[] twoSum(int[] nums, int target) {
+3        int n = nums.length;
+4        for (int i = 0; i < n; i++) {
+5            for (int j = i + 1; j < n; j++) {
+6                if ((nums[i] + nums[j]) == target) {
+7                    return new int[] { i, j };
+8                }
+9            }
+10        }
+11        return new int []{-1,-1};
+12    }
+13}
+```
 
+### AI-Generated Java Alternative
+
+```java
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> seen = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int comp = target - nums[i];
-            if (seen.containsKey(comp)) {
-                return new int[] { seen.get(comp), i };
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if ((nums[i] + nums[j]) == target) {
+                    return new int[] { i, j };
+                }
             }
-            seen.put(nums[i], i);
         }
-        return new int[] {};
+        return new int[] { -1, -1 };
     }
 }
 ```
@@ -119,67 +131,48 @@ class Solution {
 
 ### Required Concepts
 
-- Dictionaries (hash tables)
-- enumerate
-- Complement arithmetic
+- Lists
+- Range Indexing
+- Nested Loops
 
-### Original Accepted Submission
+### AI-Generated Python Implementation
 
 ```python
 class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        seen = {}
-        for i, num in enumerate(nums):
-            comp = target - num
-            if comp in seen:
-                return [seen[comp], i]
-            seen[num] = i
-        return []
-```
-
-### AI-Generated Python Alternative
-
-```python
-from typing import List
-
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        seen = {}
-        for i, num in enumerate(nums):
-            comp = target - num
-            if comp in seen:
-                return [seen[comp], i]
-            seen[num] = i
-        return []
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        n = len(nums)
+        for i in range(n):
+            for j in range(i + 1, n):
+                if nums[i] + nums[j] == target:
+                    return [i, j]
+        return [-1, -1]
 ```
 
 ## 6. C++ Solution
 
 ### Required Concepts
 
-- std::unordered_map
-- Iterator find vs end()
-- Vector initialization
+- std::vector
+- Pass-by-reference
+- Nested Iteration
 
 ### AI-Generated C++ Implementation
 
 ```cpp
 #include <vector>
-#include <unordered_map>
 
 class Solution {
 public:
     std::vector<int> twoSum(std::vector<int>& nums, int target) {
-        std::unordered_map<int, int> seen;
-        for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
-            int comp = target - nums[i];
-            auto it = seen.find(comp);
-            if (it != seen.end()) {
-                return {it->second, i};
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (nums[i] + nums[j] == target) {
+                    return {i, j};
+                }
             }
-            seen[nums[i]] = i;
         }
-        return {};
+        return {-1, -1};
     }
 };
 ```
@@ -188,33 +181,31 @@ public:
 
 ### Required Concepts
 
-- HashMap::get and Pattern Matching
-- Ownership and Borrowing
+- Vec
+- Ranges
 - Type Casting (as i32)
 
 ### AI-Generated Rust Implementation
 
 ```rust
-use std::collections::HashMap;
-
 impl Solution {
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
-        let mut seen = HashMap::new();
-        for (i, &num) in nums.iter().enumerate() {
-            let comp = target - num;
-            if let Some(&prev_idx) = seen.get(&comp) {
-                return vec![prev_idx as i32, i as i32];
+        let n = nums.len();
+        for i in 0..n {
+            for j in (i + 1)..n {
+                if nums[i] + nums[j] == target {
+                    return vec![i as i32, j as i32];
+                }
             }
-            seen.insert(num, i);
         }
-        vec![]
+        vec![-1, -1]
     }
 }
 ```
 
 ## 8. Motivation
 
-> "Simplicity is prerequisite for reliability. Transforming an O(n^2) brute force into an elegant O(n) hash map solution is the foundational milestone of algorithmic thinking."
+> "Mastery begins with understanding every solution completely, from brute force to optimal, building intuition step by step."
 
 <div align="center">
 
