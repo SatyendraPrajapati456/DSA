@@ -98,7 +98,7 @@ When we add several integer values, the resulting sum might exceed the above ran
 
 ## 2. Test Cases
 
-### Test Case 1: Standard Sample Case
+### Test Case 1: Standard Example
 
 Input:
 ```text
@@ -111,9 +111,9 @@ Output:
 ```
 
 Explanation:
-Summing the five values: 1000000001 + 1000000002 + 1000000003 + 1000000004 + 1000000005 = 5000000015, which exceeds 32-bit integer limits.
+Summing 5 values around 10^9 exceeds the 32-bit signed integer limit (2,147,483,647) and yields 5,000,000,015.
 
-### Test Case 2: Single Element
+### Test Case 2: Single Element Edge Case
 
 Input:
 ```text
@@ -126,37 +126,37 @@ Output:
 ```
 
 Explanation:
-With only one element, the sum is simply the value of that element.
+A single element equal to the upper bound 10^10 is summed to itself.
 
-### Test Case 3: Maximum Constraint Boundary
+### Test Case 3: All Zeros Boundary Case
 
 Input:
 ```text
-ar = [10000000000, 10000000000, 10000000000, 10000000000, 10000000000, 10000000000, 10000000000, 10000000000, 10000000000, 10000000000]
+ar = [0, 0, 0, 0]
 ```
 
 Output:
 ```text
-100000000000
+0
 ```
 
 Explanation:
-Ten elements of 10^10 sum to 10^11 (100 billion), which fits within a 64-bit integer.
+Adding multiple zeros results in 0.
 
 ## 3. AI-Generated Approach
 
-### Approach: 64-bit Integer Accumulation
+### Approach: Linear Scan with 64-bit Accumulator
 
-Iterate through the array and maintain a running sum using a 64-bit integer to prevent integer overflow.
+Iterate through the array and accumulate the sum into a 64-bit integer variable to prevent 32-bit integer overflow.
 
 **Step-by-Step Reasoning:**
-1. Initialize a 64-bit accumulator variable (e.g., long in Java/C++, i64 in Rust) to 0.
-2. Iterate through each element in the input list/array.
-3. Add each element to the accumulator.
-4. Return the accumulated sum.
+1. Initialize an accumulator variable of 64-bit integer type (e.g., long in Java/C++, i64 in Rust) to 0.
+2. Iterate over each element in the input array.
+3. Add the current element to the accumulator.
+4. Return the accumulated total after processing all elements.
 
 **Why It Works:**
-A 32-bit signed integer has a maximum value of 2^31 - 1 (~2.14 * 10^9). The problem states up to 10 elements can each be as large as 10^10, resulting in a maximum total sum of 10^11. A 64-bit signed integer can hold values up to 2^63 - 1 (~9.22 * 10^18), which easily avoids overflow.
+With up to 10 elements and values up to 10^10, the maximum possible sum is 10^11. A standard signed 32-bit integer can only store values up to 2^31 - 1 (~2.14 * 10^9), which would overflow. A signed 64-bit integer holds values up to 2^63 - 1 (~9.22 * 10^18), which easily accommodates the maximum possible sum without overflow.
 
 ### Time Complexity
 
@@ -170,9 +170,9 @@ O(1)
 
 ### Required Concepts
 
-- Primitive long vs 32-bit int
-- Autounboxing
-- Iterative reduction
+- 64-bit long integer
+- Integer Overflow
+- Accumulator Pattern
 
 ### AI-Generated Java Implementation
 
@@ -182,8 +182,8 @@ import java.util.List;
 class Result {
     public static long aVeryBigSum(List<Long> ar) {
         long totalSum = 0L;
-        for (long num : ar) {
-            totalSum += num;
+        for (long val : ar) {
+            totalSum += val;
         }
         return totalSum;
     }
@@ -195,8 +195,8 @@ class Result {
 ### Required Concepts
 
 - Arbitrary-precision integers
-- Built-in sum function
-- Type hints
+- Built-in sum()
+- O(n) traversal
 
 ### Original Accepted Submission
 
@@ -232,9 +232,7 @@ import java.security.*;
 ### AI-Generated Python Alternative
 
 ```python
-from typing import List
-
-def aVeryBigSum(ar: List[int]) -> int:
+def aVeryBigSum(ar: list[int]) -> int:
     return sum(ar)
 ```
 
@@ -242,9 +240,9 @@ def aVeryBigSum(ar: List[int]) -> int:
 
 ### Required Concepts
 
-- 64-bit integer types (long / long long)
-- std::accumulate initial type sensitivity
-- Cache locality
+- long long type
+- std::accumulate with 0LL
+- Integer Overflow
 
 ### AI-Generated C++ Implementation
 
@@ -252,10 +250,10 @@ def aVeryBigSum(ar: List[int]) -> int:
 #include <vector>
 #include <numeric>
 
-long aVeryBigSum(std::vector<long> ar) {
-    long totalSum = 0;
-    for (long num : ar) {
-        totalSum += num;
+long long aVeryBigSum(const std::vector<long long>& ar) {
+    long long totalSum = 0LL;
+    for (long long val : ar) {
+        totalSum += val;
     }
     return totalSum;
 }
@@ -265,21 +263,21 @@ long aVeryBigSum(std::vector<long> ar) {
 
 ### Required Concepts
 
-- 64-bit signed integer (i64)
-- Iterator consumers
-- Borrowing and dereferencing
+- i64 integer type
+- Iterator::sum
+- Borrowing
 
 ### AI-Generated Rust Implementation
 
 ```rust
-pub fn a_very_big_sum(ar: &[i64]) -> i64 {
+pub fn aVeryBigSum(ar: &[i64]) -> i64 {
     ar.iter().sum()
 }
 ```
 
 ## 8. Motivation
 
-> "Attention to data representation is as crucial as algorithmic design; choosing the right numeric types turns potential runtime failures into effortless victories."
+> "Attention to detail regarding data types and memory representation separates working code from robust, production-grade software."
 
 <div align="center">
 
