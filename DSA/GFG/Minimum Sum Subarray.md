@@ -15,7 +15,7 @@ Refer to GeeksforGeeks problem statement.
 
 ## 2. Test Cases
 
-### Test Case 1: Standard Mixed Numbers
+### Test Case 1: Standard Mixed Positive and Negative Elements
 
 Input:
 ```text
@@ -28,7 +28,7 @@ Output:
 ```
 
 Explanation:
-The contiguous subarray with the minimum sum is [-4, 2, -3, -1], which sums to -6.
+The contiguous subarray [-4, 2, -3, -1] yields the minimum sum of -6.
 
 ### Test Case 2: All Positive Numbers
 
@@ -43,7 +43,7 @@ Output:
 ```
 
 Explanation:
-Since all numbers are positive, the minimum subarray is the single element with the smallest value, which is 1.
+When all numbers are positive, the smallest contiguous sum is simply the minimum single element, which is 1.
 
 ### Test Case 3: All Negative Numbers
 
@@ -58,23 +58,23 @@ Output:
 ```
 
 Explanation:
-All numbers are negative, so taking the entire array [-2, -3, -4, -1, -2] yields the minimum sum of -12.
+Since all numbers are negative, extending the subarray across all elements yields the overall minimum sum of -12.
 
 ## 3. AI-Generated Approach
 
-### Approach: Kadane's Algorithm (Minimum Subarray Variant)
+### Approach: Kadane's Algorithm (Minimum Subarray Sum Variant)
 
-Adapt Kadane's algorithm to track the minimum contiguous subarray sum. At each element, decide whether to extend the previous minimum subarray or start a new subarray beginning at the current element.
+Adapt Kadane's classic maximum subarray algorithm to find the minimum contiguous sum by maintaining the minimum ending at the current position.
 
 **Step-by-Step Reasoning:**
-1. Initialize 'currSum' and 'minSum' with the value of the first element, arr[0].
-2. Iterate through the array from index 1 to the end.
-3. At index i, update 'currSum' to be the minimum of arr[i] and (currSum + arr[i]).
-4. Update 'minSum' to be the minimum of 'minSum' and 'currSum'.
-5. Return 'minSum' after processing all elements.
+1. Initialize both `currSum` and `minSum` with the first element of the array `arr[0]`.
+2. Iterate through the array starting from the second element (index 1).
+3. For each element `arr[i]`, update `currSum` to be the minimum of `arr[i]` and `currSum + arr[i]` (deciding whether to start a new subarray or extend the existing one).
+4. Update `minSum` to be the minimum of `minSum` and `currSum`.
+5. Return `minSum` after traversing all elements.
 
 **Why It Works:**
-Optimal substructure holds: the minimum subarray sum ending at index i is either arr[i] itself (starting a new subarray) or arr[i] added to the minimum subarray sum ending at index i-1. By tracking this locally and updating a global minimum, we consider all possible contiguous subarrays in linear time.
+At each index i, the minimum contiguous subarray ending at i either starts at i (just `arr[i]`) or extends the minimum contiguous subarray ending at i-1 (`currSum + arr[i]`). This optimal substructure property allows a single-pass DP approach without needing an auxiliary array.
 
 ### Time Complexity
 
@@ -88,9 +88,9 @@ O(1)
 
 ### Required Concepts
 
-- Dynamic Programming
-- Kadane's Algorithm
-- Math.min
+- Dynamic Programming (Kadane's)
+- In-place State Tracking
+- Primitive operations
 
 ### Original Accepted Submission
 
@@ -115,8 +115,8 @@ class Solution {
 ### Required Concepts
 
 - Dynamic Programming
-- Kadane's Variant
-- Linear Scan
+- Built-in min()
+- Slice iteration
 
 ### AI-Generated Python Implementation
 
@@ -139,7 +139,7 @@ class Solution:
 
 - std::vector
 - std::min
-- Kadane's Algorithm
+- Cache Locality
 
 ### AI-Generated C++ Implementation
 
@@ -149,7 +149,7 @@ class Solution:
 
 class Solution {
 public:
-    int minSubarraySum(const std::vector<int>& arr) {
+    int minSubarraySum(std::vector<int>& arr) {
         int currSum = arr[0];
         int minSum = arr[0];
 
@@ -167,9 +167,9 @@ public:
 
 ### Required Concepts
 
-- Borrowing
-- Iterator skipping
+- Iterators
 - std::cmp::min
+- Borrowing
 
 ### AI-Generated Rust Implementation
 
@@ -181,8 +181,8 @@ impl Solution {
         let mut curr_sum = arr[0];
         let mut min_sum = arr[0];
 
-        for &val in arr.iter().skip(1) {
-            curr_sum = std::cmp::min(val, curr_sum + val);
+        for &x in arr.iter().skip(1) {
+            curr_sum = std::cmp::min(x, curr_sum + x);
             min_sum = std::cmp::min(min_sum, curr_sum);
         }
 
@@ -193,7 +193,7 @@ impl Solution {
 
 ## 8. Motivation
 
-> "Symmetry in algorithms is powerful: reversing the objective of a classic algorithm like Kadane's reveals new solutions with the same elegance and efficiency."
+> "Simple, elegant algorithms are often duals of one another; understanding the essence of Kadane's algorithm turns a maximum problem into a minimum solution effortlessly."
 
 <div align="center">
 
