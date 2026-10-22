@@ -20,62 +20,62 @@ Assume that each input has exactly one solution, and you may not use the same el
 
 Input:
 ```text
-nums = [2, 7, 11, 15], target = 9
+nums = [2,7,11,15], target = 9
 ```
 
 Output:
 ```text
-[0, 1]
+[0,1]
 ```
 
 Explanation:
-nums[0] + nums[1] == 2 + 7 == 9, so we return [0, 1].
+nums[0] + nums[1] = 2 + 7 = 9.
 
-### Test Case 2: Different Order Example
+### Test Case 2: Duplicate Values
 
 Input:
 ```text
-nums = [3, 2, 4], target = 6
+nums = [3,3], target = 6
 ```
 
 Output:
 ```text
-[1, 2]
+[0,1]
 ```
 
 Explanation:
-nums[1] + nums[2] == 2 + 4 == 6, so we return [1, 2].
+The two 3s at indices 0 and 1 sum to 6.
 
-### Test Case 3: Duplicate Numbers
+### Test Case 3: Negative Numbers
 
 Input:
 ```text
-nums = [3, 3], target = 6
+nums = [-1,-2,-3,-4,-5], target = -8
 ```
 
 Output:
 ```text
-[0, 1]
+[2,4]
 ```
 
 Explanation:
-nums[0] + nums[1] == 3 + 3 == 6, so we return [0, 1].
+-3 + -5 = -8.
 
 ## 3. AI-Generated Approach
 
-### Approach: Hash Map
+### Approach: Hash Map (One-pass)
 
-Use a hash map to store each number and its corresponding index as we iterate through the array. For each element, check if its complement (target - current number) already exists in the hash map.
+Use a hash map to store the value of each element as a key and its index as the value. For every element, calculate its complement (target - current_value) and check if it already exists in the map.
 
 **Step-by-Step Reasoning:**
-1. Initialize an empty hash map called 'seen' to store numbers and their indices.
-2. Iterate through the array 'nums' using an index 'i' and value 'num'.
-3. Calculate the complement by subtracting 'num' from 'target'.
-4. Check if the complement exists in the 'seen' hash map. If it does, return the index of the complement and the current index 'i'.
-5. If the complement is not in the hash map, store the current number and its index in 'seen'.
+1. Initialize an empty hash map to store visited numbers and their indices.
+2. Iterate through the array using a loop, tracking both the current index and the value.
+3. Calculate the complement by subtracting the current value from the target.
+4. Check if the complement exists in the hash map. If it does, return the index stored in the map and the current index.
+5. If the complement is not found, add the current value and its index to the hash map and continue.
 
 **Why It Works:**
-By checking for the complement in the hash map during the single-pass traversal, we can find the two numbers in O(1) average time per lookup. Since we look back at numbers we have already seen, we guarantee that we do not use the same element twice and find the unique solution efficiently.
+Since we are looking for x + y = target, for any x, we are looking for y = target - x. A hash map provides O(1) average time complexity for lookups, allowing us to find the complement in a single pass rather than using a nested loop.
 
 ### Time Complexity
 
@@ -89,9 +89,9 @@ O(n)
 
 ### Required Concepts
 
-- Arrays
 - HashMap
-- Time Complexity
+- Array Indexing
+- Autoboxing
 
 ### AI-Generated Java Implementation
 
@@ -101,15 +101,15 @@ import java.util.Map;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> seen = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            int comp = target - nums[i];
-            if (seen.containsKey(comp)) {
-                return new int[] { seen.get(comp), i };
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[] { map.get(complement), i };
             }
-            seen.put(nums[i], i);
+            map.put(nums[i], i);
         }
-        return new int[0];
+        return new int[] {};
     }
 }
 ```
@@ -118,9 +118,9 @@ class Solution {
 
 ### Required Concepts
 
-- Lists
 - Dictionaries
-- In-place modification
+- Enumerate
+- Hashing
 
 ### Original Accepted Submission
 
@@ -136,13 +136,27 @@ class Solution:
         return []
 ```
 
+### AI-Generated Python Alternative
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        seen = {}
+        for i, num in enumerate(nums):
+            complement = target - num
+            if complement in seen:
+                return [seen[complement], i]
+            seen[num] = i
+        return []
+```
+
 ## 6. C++ Solution
 
 ### Required Concepts
 
-- std::vector
 - std::unordered_map
-- Complexity
+- std::vector
+- Iterators
 
 ### AI-Generated C++ Implementation
 
@@ -155,9 +169,9 @@ public:
     std::vector<int> twoSum(std::vector<int>& nums, int target) {
         std::unordered_map<int, int> seen;
         for (int i = 0; i < nums.size(); ++i) {
-            int comp = target - nums[i];
-            if (seen.find(comp) != seen.end()) {
-                return {seen[comp], i};
+            int complement = target - nums[i];
+            if (seen.find(complement) != seen.end()) {
+                return {seen[complement], i};
             }
             seen[nums[i]] = i;
         }
@@ -170,10 +184,9 @@ public:
 
 ### Required Concepts
 
-- Vec
 - HashMap
 - Ownership
-- Pattern Matching
+- Type Casting
 
 ### AI-Generated Rust Implementation
 
@@ -184,9 +197,9 @@ impl Solution {
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
         let mut seen = HashMap::new();
         for (i, &num) in nums.iter().enumerate() {
-            let comp = target - num;
-            if let Some(&prev_index) = seen.get(&comp) {
-                return vec![prev_index as i32, i as i32];
+            let complement = target - num;
+            if let Some(&prev_idx) = seen.get(&complement) {
+                return vec![prev_idx as i32, i as i32];
             }
             seen.insert(num, i);
         }
@@ -197,7 +210,7 @@ impl Solution {
 
 ## 8. Motivation
 
-> "It's not that I'm so smart, it's just that I stay with problems longer. — Albert Einstein"
+> "The most efficient solution often comes from changing how you view the data—turning a search problem into a lookup problem."
 
 <div align="center">
 
